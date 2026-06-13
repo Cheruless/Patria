@@ -10,6 +10,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,6 +24,8 @@ import java.util.Optional;
 @Transactional
 public class IComunaService implements ComunaService {
 
+    private static boolean savedFlag = false;
+
     @Autowired
     private ComunaRepository repository;
     private final WebClient webClient;
@@ -30,14 +34,40 @@ public class IComunaService implements ComunaService {
         this.webClient = webClient;
     }
 
+    /*++++++++++++++++MÉTODOS PÚBLICOS DE SERVICE++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
     @Override
     public List<ComunaEntity> findAll() {
+        if (!savedFlag)
+            processComunasData();
         return repository.findAll();
     }
 
     @Override
     public Optional<ComunaEntity> findById(Integer id) {
-        return Optional.empty();
+        if (!savedFlag)
+            processComunasData();
+        return repository.findById(id);
+    }
+
+    /*++++++++++++++++MÉTODOS PRIVADOS DE SERVICE++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+    @EventListener(ApplicationReadyEvent.class)
+    protected void initDataOnStartup() {
+        if (!savedFlag)
+            processComunasData();
+    }
+
+    private void processComunasData() {
+        String xmlContent = fetchXmlFromApi();
+
+        if (xmlContent == null)
+            return;
+
+        List<ComunaEntity> comunas = parseXmlToComunas(xmlContent);
+
+        repository.saveAll(comunas);
+        repository.flush();
     }
 
     private String fetchXmlFromApi() {
