@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/scrap_diputados_service/src/main/resources/db/migration/V1__crear_tablas.sql" value="088ff487-ce4c-4f8d-8e0b-587d660f8003" />
+  </component>
+</project>
