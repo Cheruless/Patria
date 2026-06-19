@@ -110,30 +110,30 @@ public class IDiputadoService implements DiputadoService {
         Document doc = Jsoup.parse(xmlContent, "", Parser.xmlParser());
 
         for (Element e : doc.selectXpath("//DiputadoPeriodo")) {
-            DiputadoEntity diputadoBuffer = new DiputadoEntity();
-
             Element idElement = e.selectXpath(".//Diputado/Id").first();
-            if (idElement != null) {
+
+            if (idElement != null && !idElement.text().isEmpty()) {
+                DiputadoEntity diputadoBuffer = new DiputadoEntity();
                 diputadoBuffer.setDiputado_id(Integer.parseInt(idElement.text()));
+
+                String n1 = e.selectXpath(".//Diputado/Nombre").text();
+                String n2 = e.selectXpath(".//Diputado/Nombre2").text();
+                String ap = e.selectXpath(".//Diputado/ApellidoPaterno").text();
+                String am = e.selectXpath(".//Diputado/ApellidoMaterno").text();
+
+                String completo = String.format("%s %s %s %s", n1, n2, ap, am)
+                        .replaceAll("\\s+", " ")
+                        .trim();
+
+                diputadoBuffer.setNombreCompleto(completo.isEmpty() ? null : completo);
+
+                Element partidoAlias = e.selectXpath(".//Militancias/Militancia[last()]/Partido/Alias").first();
+                if (partidoAlias != null) {
+                    diputadoBuffer.setAliasPartido(partidoAlias.text());
+                }
+
+                diputados.add(diputadoBuffer);
             }
-
-            String n1 = e.selectXpath(".//Diputado/Nombre").text();
-            String n2 = e.selectXpath(".//Diputado/Nombre2").text();
-            String ap = e.selectXpath(".//Diputado/ApellidoPaterno").text();
-            String am = e.selectXpath(".//Diputado/ApellidoMaterno").text();
-
-            String completo = String.format("%s %s %s %s", n1, n2, ap, am)
-                    .replaceAll("\\s+", " ")
-                    .trim();
-
-            diputadoBuffer.setNombreCompleto(completo);
-
-            Element partidoAlias = e.selectXpath(".//Militancias/Militancia[last()]/Partido/Alias").first();
-            if (partidoAlias != null) {
-                diputadoBuffer.setAliasPartido(partidoAlias.text());
-            }
-
-            diputados.add(diputadoBuffer);
         }
         return diputados;
     }

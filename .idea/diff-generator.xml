@@ -2,6 +2,8 @@
 <project version="4">
   <component name="DiffGenerationConfig">
     <option name="snapshotDb" value="false" />
-    <option name="snapshotModelValue" value="scrap_diputados_service:scrap_diputados_service" />
+    <option name="snapshotModelValue" value="scrap_locations_service:scrap_locations_service" />
+    <option name="sourceModelValue" value="scrap_locations_service:scrap_locations_service" />
+    <option name="targetDbValue" value="dac3964d-ea38-4851-9669-3ea4c49315eb" />
   </component>
 </project>

@@ -1,0 +1,16 @@
+INSERT INTO region (id, nombre, numero) VALUES (1, 'TARAPACA', 'I');
+INSERT INTO region (id, nombre, numero) VALUES (2, 'ANTOFAGASTA', 'II');
+INSERT INTO region (id, nombre, numero) VALUES (3, 'ATACAMA', 'III');
+INSERT INTO region (id, nombre, numero) VALUES (4, 'COQUIMBO', 'IV');
+INSERT INTO region (id, nombre, numero) VALUES (5, 'VALPARAISO', 'V');
+INSERT INTO region (id, nombre, numero) VALUES (6, 'LIBERTADOR GENERAL BERNARDO O''HIGGINS', 'VI');
+INSERT INTO region (id, nombre, numero) VALUES (7, 'MAULE', 'VII');
+INSERT INTO region (id, nombre, numero) VALUES (8, 'BIOBIO', 'VIII');
+INSERT INTO region (id, nombre, numero) VALUES (9, 'ARAUCANIA', 'IX');
+INSERT INTO region (id, nombre, numero) VALUES (10, 'LOS LAGOS', 'X');
+INSERT INTO region (id, nombre, numero) VALUES (11, 'AISEN DEL GENERAL CARLOS IBAÑEZ DEL CAMPO', 'XI');
+INSERT INTO region (id, nombre, numero) VALUES (12, 'MAGALLANES Y ANTARTICA CHILENA', 'XII');
+INSERT INTO region (id, nombre, numero) VALUES (13, 'REGION METROPOLITANA', 'RM');
+INSERT INTO region (id, nombre, numero) VALUES (14, 'LOS RIOS', 'XIV');
+INSERT INTO region (id, nombre, numero) VALUES (15, 'ARICA Y PARINACOTA', 'XV');
+INSERT INTO region (id, nombre, numero) VALUES (16, 'ÑUBLE', 'XVI');

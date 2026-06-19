@@ -3,8 +3,8 @@ spring:
     name: Scrap Location
 
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ms_scrap_locations
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ms_scrap_locations?allowMultiQueries=true&characterEncoding=UTF-8&useUnicode=true
     username: "user_scrap_locations"
     password: "ms.SLocations.1"
 

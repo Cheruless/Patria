@@ -2,22 +2,15 @@ CREATE TABLE profile
 (
     id              INT NOT NULL,
     nombre_completo VARCHAR(255) NULL,
+    partido         VARCHAR(255) NULL,
     distrito_id     INT NULL,
+    region          VARCHAR(255) NULL,
     CONSTRAINT pk_profile PRIMARY KEY (id)
 );
 
-CREATE TABLE revchanges
+CREATE TABLE profile_comunas
 (
-    rev        BIGINT NOT NULL,
-    entityname VARCHAR(255) NULL
+    profile_id INT NOT NULL,
+    comuna     VARCHAR(255) NULL,
+    CONSTRAINT fk_profile_comunas FOREIGN KEY (profile_id) REFERENCES profile (id)
 );
-
-CREATE TABLE revinfo
-(
-    rev      BIGINT NOT NULL,
-    revtstmp BIGINT NULL,
-    CONSTRAINT pk_revinfo PRIMARY KEY (rev)
-);
-
-ALTER TABLE revchanges
-    ADD CONSTRAINT fk_revchanges_on_default_tracking_modified_entities_changelog FOREIGN KEY (rev) REFERENCES revinfo (rev);

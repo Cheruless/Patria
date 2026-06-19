@@ -1,9 +1,12 @@
 package cl.patria.diputado_profile_service.controller;
 
 import cl.patria.diputado_profile_service.model.ProfileEntity;
-import cl.patria.diputado_profile_service.model.dto.ProfileDTO;
 import cl.patria.diputado_profile_service.service.ProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,32 +16,50 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/v1/profiles")
+@Tag(name = "Perfiles de Diputados", description = "Endpoints para obtener los perfiles consolidados de Diputados con su informacion territorial")
 public class ProfileController {
 
     @Autowired
     private ProfileService service;
 
     @GetMapping
-    public ResponseEntity<List<ProfileEntity>> returnProfiles() {
+    @Operation(summary = "Obtener lista completa de perfiles de diputados")
+    public ResponseEntity<CollectionModel<EntityModel<ProfileEntity>>> returnProfiles() {
         List<ProfileEntity> profiles = service.getProfiles();
 
-        if (profiles == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        return (!profiles.isEmpty())
-                ? ResponseEntity.status(HttpStatus.OK).body(profiles)
-                : ResponseEntity.status(HttpStatus.NO_CONTENT).body(profiles);
+        if (profiles == null || profiles.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        List<EntityModel<ProfileEntity>> profilesModels = profiles.stream()
+                .map(profile -> EntityModel.of(profile,
+                        linkTo(methodOn(ProfileController.class).returnProfileById(profile.getId())).withSelfRel(),
+                        linkTo(methodOn(ProfileController.class).returnProfiles()).withRel("profiles")))
+                .collect(Collectors.toList());
+
+        CollectionModel<EntityModel<ProfileEntity>> collectionModel = CollectionModel.of(profilesModels,
+                linkTo(methodOn(ProfileController.class).returnProfiles()).withSelfRel());
+
+        return ResponseEntity.status(HttpStatus.OK).body(collectionModel);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileEntity> returnProfileById(@PathVariable("id") int id) {
+    @Operation(summary = "Obtener un perfil especifico de un Diputado por su identificador")
+    public ResponseEntity<EntityModel<ProfileEntity>> returnProfileById(@PathVariable("id") int id) {
         Optional<ProfileEntity> profile = service.getProfile(id);
 
-        return (profile.isPresent())
-                ? ResponseEntity.status(HttpStatus.OK).body(profile.get())
-                : ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return profile.map(p -> {
+            EntityModel<ProfileEntity> resource = EntityModel.of(p,
+                    linkTo(methodOn(ProfileController.class).returnProfileById(id)).withSelfRel(),
+                    linkTo(methodOn(ProfileController.class).returnProfiles()).withRel("profiles"));
+            return ResponseEntity.status(HttpStatus.OK).body(resource);
+        }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
-

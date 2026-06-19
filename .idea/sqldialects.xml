@@ -4,5 +4,10 @@
     <file url="file://$PROJECT_DIR$/diputado_profile_service/src/main/resources/db/migration/V1__create_table.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/scrap_diputados_service/src/main/resources/db/migration/V1__crear_tablas.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/scrap_diputados_service/src/main/resources/scripts/actualizar_distritos.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/scrap_locations_service/src/main/resources/db/migration/V1__crear_tablas.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/scrap_locations_service/src/main/resources/db/migration/V2__insertar_comunas.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/scrap_locations_service/src/main/resources/db/migration/V3__insertar_regiones.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/scrap_locations_service/src/main/resources/db/migration/V4__insertar_distritos.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/scrap_locations_service/src/main/resources/db/migration/V5__actualizar_comunas.sql" dialect="MySQL" />
   </component>
 </project>

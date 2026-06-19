@@ -90,10 +90,10 @@ public class IComunaService implements ComunaService {
         Document doc = Jsoup.parse(xmlContent, "", Parser.xmlParser());
 
         for (Element e : doc.selectXpath("//Comuna")) {
-            ComunaEntity comunaBuffer = new ComunaEntity();
-
+            ComunaEntity comunaBuffer;
             // Id de Comuna
             String idElement = e.selectXpath("./Numero").text();
+            comunaBuffer = repository.findById(Integer.parseInt(idElement)).orElse(new ComunaEntity());
             comunaBuffer.setId(Integer.parseInt(idElement));
 
             String nombre = e.selectXpath("./Nombre").text();

@@ -1,13 +1,11 @@
 package cl.patria.diputado_profile_service.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.List;
 
 @Entity
 @Table(name = "Profile")
@@ -17,7 +15,15 @@ import lombok.Setter;
 @Setter
 public class ProfileEntity {
     @Id
-    private int id;
+    private Integer id;
+
     @Column(name = "nombre_completo") private String nombreCompleto;
+    @Column(name = "partido") private String partido;
     @Column(name = "distrito_id") private int distritoId;
+    @Column(name = "region")  private String region;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "profile_comunas", joinColumns = @JoinColumn(name = "profile_id"))
+    @Column(name = "comuna")
+    private List<String> comunas;
 }
