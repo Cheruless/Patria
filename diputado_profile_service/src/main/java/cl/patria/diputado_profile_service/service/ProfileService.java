@@ -8,8 +8,8 @@ import java.util.Optional;
 
 
 public interface ProfileService {
-    String uriDiputadosScraper = "http://localhost:8081/api/v1/scrap/diputados";
-    String uriDistritosScraper = "http://localhost:8082/api/v1/scrap/distritos";
+    String uriDiputadosScraper = "http://patria-scrap-diputados:8081/api/v1/scrap/diputados";
+    String uriDistritosScraper = "http://patria-scrap-locations:8082/api/v1/scrap/distritos";
     List<ProfileEntity> getProfiles();
     Optional<ProfileEntity> getProfile(int id);
 
