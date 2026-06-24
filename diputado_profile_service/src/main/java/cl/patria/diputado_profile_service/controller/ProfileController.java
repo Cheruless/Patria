@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -35,7 +33,7 @@ public class ProfileController {
         List<ProfileEntity> profiles = service.getProfiles();
 
         if (profiles == null || profiles.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.noContent().build();
         }
 
         List<EntityModel<ProfileEntity>> profilesModels = profiles.stream()
@@ -47,19 +45,17 @@ public class ProfileController {
         CollectionModel<EntityModel<ProfileEntity>> collectionModel = CollectionModel.of(profilesModels,
                 linkTo(methodOn(ProfileController.class).returnProfiles()).withSelfRel());
 
-        return ResponseEntity.status(HttpStatus.OK).body(collectionModel);
+        return ResponseEntity.ok(collectionModel);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Obtener un perfil especifico de un Diputado por su identificador")
     public ResponseEntity<EntityModel<ProfileEntity>> returnProfileById(@PathVariable("id") int id) {
-        Optional<ProfileEntity> profile = service.getProfile(id);
-
-        return profile.map(p -> {
-            EntityModel<ProfileEntity> resource = EntityModel.of(p,
-                    linkTo(methodOn(ProfileController.class).returnProfileById(id)).withSelfRel(),
-                    linkTo(methodOn(ProfileController.class).returnProfiles()).withRel("profiles"));
-            return ResponseEntity.status(HttpStatus.OK).body(resource);
-        }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return service.getProfile(id)
+                .map(p -> ResponseEntity.ok(
+                        EntityModel.of(p,
+                                linkTo(methodOn(ProfileController.class).returnProfileById(id)).withSelfRel(),
+                                linkTo(methodOn(ProfileController.class).returnProfiles()).withRel("profiles"))))
+                .orElseGet(() -> ResponseEntity.noContent().build());
     }
 }

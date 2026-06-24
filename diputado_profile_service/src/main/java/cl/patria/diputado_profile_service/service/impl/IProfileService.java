@@ -46,11 +46,7 @@ public class IProfileService implements ProfileService {
         // 2. Rescatar la data directamente desde nuestra base de datos local
         List<ProfileEntity> dbProfiles = repository.findAll();
 
-        // 3. Si hay datos en la base de datos (independiente de si la red falló o no), los retornamos.
-        if (!dbProfiles.isEmpty())
-            return dbProfiles;
-        // 4. Solo si la DB está vacía, decidimos en base a la conexión web
-        return (!webFlag) ? dbProfiles : null;
+        return dbProfiles;
     }
 
     @Override
@@ -60,9 +56,7 @@ public class IProfileService implements ProfileService {
 
         Optional<ProfileEntity> dbProfile = repository.findById(id);
 
-        if (dbProfile.isPresent())
-            return dbProfile;
-        return (!webFlag) ? dbProfile : null;
+        return dbProfile;
     }
 
     private void getListProfiles() {
